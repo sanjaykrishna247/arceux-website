@@ -39,7 +39,8 @@ function Scene({ progress, overlay, labelled }) {
     // shift the picture down by half the header band so the stack is centred in the free space
     if (labelled) camera.setViewOffset(w, h, w * 0.02, -NAV_SPACE / 2, w, h);
     // phones with number tags: nudge the stack left to leave a column for the tags
-    else if (overlay) camera.setViewOffset(w, h, w * 0.12, 0, w, h);
+    // and drop it a little so the arm (L01) has clear space under the top edge
+    else if (overlay) camera.setViewOffset(w, h, w * 0.12, -h * 0.05, w, h);
     else camera.clearViewOffset();
     camera.updateProjectionMatrix();
   }, [camera, size, labelled, overlay]);
@@ -58,7 +59,8 @@ function Scene({ progress, overlay, labelled }) {
     const az = 0.55 + 0.35 * pe;
     const el = 0.34 - 0.16 * pe;
     // fit the growing stack into the height left below the header (with a margin)
-    const fit = labelled ? size.height / Math.max(200, size.height - NAV_SPACE - 40) : 1;
+    // phones: pull back ~15% so the whole stack, arm included, sits inside the stage
+    const fit = labelled ? size.height / Math.max(200, size.height - NAV_SPACE - 40) : overlay ? 1.15 : 1;
     const d = ((labelled ? 4.8 : 4.0) + (labelled ? 5.6 : 3.6) * pe) * fit;
     target.set(0.02, 0.45 + 1.35 * pe, 0);
     camera.position.set(
