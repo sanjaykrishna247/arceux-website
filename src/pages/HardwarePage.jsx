@@ -166,6 +166,7 @@ export default function HardwarePage() {
                       labelled={!phone}
                       lp={sequentialProgress}
                       yaw={yaw}
+                      showcase
                       onReady={() => setReady(true)}
                     />
                   </Suspense>

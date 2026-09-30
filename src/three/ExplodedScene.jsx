@@ -24,12 +24,17 @@ const ANCHORS = [
 
 export { layerProgress, sequentialProgress };
 
-function Scene({ progress, overlay, labelled, lp = layerProgress, yaw, onReady }) {
+// Showcase (/hardware): small layers grow a little as they lift out so their parts read,
+// then return to true size when the robot reassembles. Index = layer (bottom → top).
+const MAGNIFY = [1, 1.15, 1.35, 1.8, 1.8, 1, 1, 1];
+
+function Scene({ progress, overlay, labelled, lp = layerProgress, yaw, showcase, onReady }) {
   const rig = useRef({});
   const spin = useRef();
   const { camera, size } = useThree();
   const v = useMemo(() => new THREE.Vector3(), []);
   const target = useMemo(() => new THREE.Vector3(), []);
+  const centers = useRef(null);
   const readyFired = useRef(false);
 
   useEffect(() => {
@@ -48,12 +53,27 @@ function Scene({ progress, overlay, labelled, lp = layerProgress, yaw, onReady }
     const r = rig.current;
     if (!r.layers) return;
 
+    if (showcase && !centers.current) {
+      // layer centres at rest, so magnified layers scale about their own middle
+      centers.current = r.layers.map((g) => new THREE.Box3().setFromObject(g).getCenter(new THREE.Vector3()));
+    }
     if (onReady && !readyFired.current) {
       // tell the page once the robot is actually on screen (after this frame is drawn)
       readyFired.current = true;
       requestAnimationFrame(() => onReady());
     }
-    r.layers.forEach((g, k) => (g.position.y = lp(p, k) * k * GAP));
+    r.layers.forEach((g, k) => {
+      const l = lp(p, k);
+      const y = l * k * GAP;
+      if (!showcase) {
+        g.position.y = y;
+        return;
+      }
+      const s = 1 + (MAGNIFY[k] - 1) * l;
+      const c = centers.current[k];
+      g.scale.setScalar(s);
+      g.position.set(-c.x * (s - 1), y - c.y * (s - 1), -c.z * (s - 1));
+    });
     if (r.lidarHead) r.lidarHead.rotation.y = state.clock.elapsedTime * 3;
     if (!labelled) spin.current.rotation.y = Math.sin(state.clock.elapsedTime * 0.25) * 0.25;
 
@@ -61,12 +81,13 @@ function Scene({ progress, overlay, labelled, lp = layerProgress, yaw, onReady }
     // so layers that lift early, like the arm in sequential mode, never leave the frame
     let pe = 0;
     for (let k = 1; k < 8; k++) pe = Math.max(pe, (lp(p, k) * k) / 7);
-    const az = 0.55 + 0.35 * pe + (yaw?.current ?? 0);
+    const sway = showcase ? 0.16 * Math.sin(state.clock.elapsedTime * 0.35) : 0;
+    const az = 0.55 + 0.35 * pe + (yaw?.current ?? 0) + sway;
     const el = 0.34 - 0.16 * pe;
     // fit the growing stack into the height left below the header (with a margin)
     // phones: pull back ~15% so the whole stack, arm included, sits inside the stage
     const fit = labelled ? size.height / Math.max(200, size.height - NAV_SPACE - 40) : overlay ? 1.15 : 1;
-    const d = ((labelled ? 4.8 : 4.0) + (labelled ? 5.6 : 3.6) * pe) * fit;
+    const d = ((labelled ? 4.8 : 4.0) + (labelled ? 5.6 : 3.6) * pe) * fit * (showcase && labelled ? 0.8 : 1); // zoom in on desktop only; phones keep the full-fit frame
     target.set(0.02, 0.45 + 1.35 * pe, 0);
     camera.position.set(
       target.x + d * Math.cos(el) * Math.sin(az),
@@ -88,7 +109,7 @@ function Scene({ progress, overlay, labelled, lp = layerProgress, yaw, onReady }
     const items = [];
     spin.current.updateMatrixWorld();
     for (let k = 7; k >= 0; k--) {
-      // anchors follow each layer's transform
+      // anchors follow each layer's full transform (lift, magnify, sway)
       if (ANCHORS[k]) r.layers[k].localToWorld(v.set(...ANCHORS[k]));
       else {
         r.el.updateWorldMatrix(true, false);
@@ -148,7 +169,7 @@ function Scene({ progress, overlay, labelled, lp = layerProgress, yaw, onReady }
   );
 }
 
-export default function ExplodedScene({ progress, overlay, labelled = true, active = true, lp, yaw, onReady }) {
+export default function ExplodedScene({ progress, overlay, labelled = true, active = true, lp, yaw, showcase = false, onReady }) {
   return (
     <Canvas
       dpr={[1, 1.75]}
@@ -157,8 +178,8 @@ export default function ExplodedScene({ progress, overlay, labelled = true, acti
       frameloop={active ? 'always' : 'never'}
       aria-hidden="true"
     >
-      <Studio dark />
-      <Scene progress={progress} overlay={overlay} labelled={labelled} lp={lp} yaw={yaw} onReady={onReady} />
+      <Studio dark showcase={showcase} />
+      <Scene progress={progress} overlay={overlay} labelled={labelled} lp={lp} yaw={yaw} showcase={showcase} onReady={onReady} />
       <ContactShadows position={[0, 0.001, 0]} scale={8} blur={2.6} far={1.2} opacity={0.7} resolution={256} color="#000" />
     </Canvas>
   );
