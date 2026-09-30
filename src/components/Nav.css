@@ -16,7 +16,7 @@
   align-items: center;
   gap: 6px;
   height: 52px;
-  padding: 0 6px 0 16px;
+  padding: 0 6px 0 7px;
   border-radius: 999px;
   background: rgba(250, 251, 253, 0.72);
   border: 1px solid rgba(24, 36, 56, 0.1);
@@ -33,13 +33,13 @@
 .logo {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   margin-right: 10px;
   text-decoration: none;
   font-family: var(--mono);
   font-weight: 500;
-  font-size: 13px;
-  letter-spacing: 0.12em;
+  font-size: 14px;
+  letter-spacing: 0.14em;
   color: var(--ink);
 }
 .logo__mark {

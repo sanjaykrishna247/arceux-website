@@ -76,14 +76,39 @@ function Pinned({ gl }) {
 function Stacked({ gl }) {
   const stage = useRef(null);
   const near = useNearViewport(stage);
+  // phones: numbered tags on the 3D stack that match the L01–L08 list below
+  const overlay = useRef({ labels: [], lines: [], dots: [], counter: null });
+  const o = overlay.current;
   return (
     <div className="container xv__mobile">
       <Head />
       <div className="xv__mstage" ref={stage}>
         {gl && (
           <Suspense fallback={null}>
-            <ExplodedScene progress={1} labelled={false} active={near} />
+            <ExplodedScene progress={1} labelled={false} overlay={overlay} active={near} />
           </Suspense>
+        )}
+        {gl && (
+          <>
+            <svg className="xv__lines" aria-hidden="true">
+              {hardware.layers.map((_, i) => {
+                const k = 7 - i;
+                return (
+                  <g key={k}>
+                    <line ref={(el) => (o.lines[k] = el)} style={{ opacity: 0 }} />
+                    <circle ref={(el) => (o.dots[k] = el)} r="3" style={{ opacity: 0 }} />
+                  </g>
+                );
+              })}
+            </svg>
+            <ol className="xv__labels" aria-hidden="true">
+              {hardware.layers.map((l, i) => (
+                <li key={l.name} ref={(el) => (o.labels[7 - i] = el)} className="xv__tag mono" style={{ opacity: 0 }}>
+                  L{String(i + 1).padStart(2, '0')}
+                </li>
+              ))}
+            </ol>
+          </>
         )}
       </div>
       <Reveal as="ol" className="xv__mlist" amount={0.1}>

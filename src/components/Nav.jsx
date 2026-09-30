@@ -6,7 +6,7 @@ import './Nav.css';
 export function Logo() {
   return (
     <a href="#top" className="logo" aria-label="ARCEUX home">
-      <LogoMark size={30} className="logo__mark" />
+      <LogoMark size={38} className="logo__mark" />
       <span>ARCEUX</span>
     </a>
   );

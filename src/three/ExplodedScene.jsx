@@ -38,9 +38,11 @@ function Scene({ progress, overlay, labelled }) {
     const { width: w, height: h } = size;
     // shift the picture down by half the header band so the stack is centred in the free space
     if (labelled) camera.setViewOffset(w, h, w * 0.02, -NAV_SPACE / 2, w, h);
+    // phones with number tags: nudge the stack left to leave a column for the tags
+    else if (overlay) camera.setViewOffset(w, h, w * 0.12, 0, w, h);
     else camera.clearViewOffset();
     camera.updateProjectionMatrix();
-  }, [camera, size, labelled]);
+  }, [camera, size, labelled, overlay]);
 
   useFrame((state) => {
     const p = typeof progress === 'number' ? progress : progress.get();
@@ -68,10 +70,12 @@ function Scene({ progress, overlay, labelled }) {
 
     // project anchors → move labels and leader lines
     const o = overlay?.current;
-    if (!o || !labelled) return;
+    if (!o) return;
     const { width: w, height: h } = size;
-    const labelX = w * 0.63;
-    const GAP_PX = 58; // minimum vertical spacing between labels
+    // desktop: full labels at 63% width; phones: compact number tags near the right edge
+    const labelX = labelled ? w * 0.63 : w - 58;
+    const GAP_PX = labelled ? 58 : 30; // minimum vertical spacing between labels
+    const top = labelled ? NAV_SPACE + 12 : 16;
 
     // pass 1: project every layer's anchor to screen space
     const items = [];
@@ -85,13 +89,13 @@ function Scene({ progress, overlay, labelled }) {
     }
 
     // pass 2: top → bottom, push labels apart so they never overlap or sit under the header
-    let prev = NAV_SPACE + 12 - GAP_PX;
+    let prev = top - GAP_PX;
     for (const it of items) {
       if (it.vis < 0.02) continue;
       it.ly = Math.max(it.sy, prev + GAP_PX);
       prev = it.ly;
     }
-    const overflow = prev - (h - 48);
+    const overflow = prev - (h - (labelled ? 48 : 16));
     if (overflow > 0) {
       // too tall: pull the whole column up again, keeping the spacing
       for (const it of items) if (it.vis >= 0.02) it.ly -= overflow;
@@ -103,7 +107,7 @@ function Scene({ progress, overlay, labelled }) {
       const line = o.lines[k];
       const dot = o.dots[k];
       if (lab) {
-        lab.style.transform = `translate3d(${labelX + 18}px, ${ly}px, 0) translateY(-50%)`;
+        lab.style.transform = `translate3d(${labelX + (labelled ? 18 : 6)}px, ${ly}px, 0) translateY(-50%)`;
         lab.style.opacity = vis;
       }
       if (line) {
