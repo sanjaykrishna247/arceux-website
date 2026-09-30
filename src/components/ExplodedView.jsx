@@ -3,6 +3,7 @@ import { useScroll, useTransform } from 'framer-motion';
 import { hardware } from '../content.js';
 import { hasWebGL, useMedia, useNearViewport } from '../hooks/useMedia.js';
 import SectionLabel from './ui/SectionLabel.jsx';
+import ErrorBoundary from './ui/ErrorBoundary.jsx';
 import { Reveal, RevealItem } from './ui/Reveal.jsx';
 import './ExplodedView.css';
 
@@ -42,9 +43,11 @@ function Pinned({ gl }) {
         </div>
         <div className="xv__stage">
           {gl && (
+            <ErrorBoundary>
             <Suspense fallback={null}>
               <ExplodedScene progress={progress} overlay={overlay} active={near} />
             </Suspense>
+            </ErrorBoundary>
           )}
           <svg className="xv__lines" aria-hidden="true">
             {hardware.layers.map((_, i) => {
@@ -90,9 +93,11 @@ function Stacked({ gl }) {
       </a>
       <div className="xv__mstage" ref={stage}>
         {gl && (
+          <ErrorBoundary>
           <Suspense fallback={null}>
             <ExplodedScene progress={1} labelled={false} overlay={overlay} active={near} />
           </Suspense>
+          </ErrorBoundary>
         )}
         {gl && (
           <>
