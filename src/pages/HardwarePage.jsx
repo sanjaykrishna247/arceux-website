@@ -4,7 +4,6 @@ import { hardware } from '../content.js';
 import { hasWebGL, useMedia } from '../hooks/useMedia.js';
 import ExplodedScene, { sequentialProgress } from '../three/ExplodedScene.jsx';
 import ComponentGrid from '../components/ComponentGrid.jsx';
-import ErrorBoundary from '../components/ui/ErrorBoundary.jsx';
 import Footer from '../components/Footer.jsx';
 import { Logo } from '../components/Nav.jsx';
 import '../components/Nav.css';
@@ -147,11 +146,7 @@ export default function HardwarePage() {
             onPointerUp={onPointerUp}
             onPointerCancel={onPointerUp}
           >
-            {gl && (
-              <ErrorBoundary fallback={<p className="mono hw__nogl">The 3D view couldn’t start on this device. The layers are listed below.</p>}>
-                <ExplodedScene progress={progress} overlay={overlay} labelled={!phone} lp={sequentialProgress} yaw={yaw} />
-              </ErrorBoundary>
-            )}
+            {gl && <ExplodedScene progress={progress} overlay={overlay} labelled={!phone} lp={sequentialProgress} yaw={yaw} />}
             {gl && (
               <>
                 <svg className="xv__lines" aria-hidden="true">
