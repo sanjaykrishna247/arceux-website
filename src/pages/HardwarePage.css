@@ -110,8 +110,13 @@
   }
 }
 
-/* the robot is drawn straight away, no fade */
+/* a quick fade once the robot's first frame is drawn, so it doesn't pop in */
 .hw__canvas {
   position: absolute;
   inset: 0;
+  opacity: 0;
+  transition: opacity 0.25s ease-out;
+}
+.hw__canvas.is-ready {
+  opacity: 1;
 }

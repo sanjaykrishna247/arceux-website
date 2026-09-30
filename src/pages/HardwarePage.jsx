@@ -158,7 +158,7 @@ export default function HardwarePage() {
           >
             {gl && (
               <ErrorBoundary fallback={<p className="mono hw__nogl">The 3D view couldn’t start on this device. The layers are listed below.</p>}>
-                <div className="hw__canvas">
+                <div className={`hw__canvas ${ready ? 'is-ready' : ''}`}>
                   <Suspense fallback={null}>
                     <ExplodedScene
                       progress={progress}
