@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { animate, useMotionValue, useReducedMotion } from 'framer-motion';
-import { hardware, links, linkProps } from '../content.js';
+import { hardware } from '../content.js';
 import { hasWebGL, useMedia } from '../hooks/useMedia.js';
 import ExplodedScene, { sequentialProgress } from '../three/ExplodedScene.jsx';
 import ComponentGrid from '../components/ComponentGrid.jsx';
@@ -101,11 +101,8 @@ export default function HardwarePage() {
       <header className="nav nav--scrolled">
         <div className="nav__pill">
           <Logo href="/" />
-          <a className="hw-back" href="/">
-            ← Back to site
-          </a>
-          <a className="btn btn--primary btn--sm nav__cta hw-cta" {...linkProps(links.console)}>
-            Platform
+          <a className="btn btn--primary btn--sm hw-go" href="/">
+            Go to site <span className="btn__arrow">→</span>
           </a>
         </div>
       </header>
