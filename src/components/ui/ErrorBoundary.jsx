@@ -10,6 +10,7 @@ export default class ErrorBoundary extends Component {
 
   componentDidCatch(error) {
     console.error('3D view failed, showing fallback instead:', error);
+    this.props.onError?.(error);
   }
 
   render() {

@@ -67,8 +67,9 @@ export default function Hero() {
   const stage = useRef(null);
   const near = useNearViewport(stage, '0px');
   const finePointer = useMedia('(hover: hover) and (pointer: fine)');
-  const [gl, setGl] = useState(null);
-  useEffect(() => setGl(hasWebGL()), []);
+  // checked synchronously so the 3D canvas mounts on the very first render
+  const [gl] = useState(hasWebGL);
+  const [ready, setReady] = useState(false); // first 3D frame drawn
 
   const item = (i) => ({
     initial: reduce ? false : { opacity: 0, y: 16 },
@@ -115,20 +116,20 @@ export default function Hero() {
         </div>
 
         <div className="hero__stage" ref={stage}>
-          <div className="hero__canvas">
+          <div className={`hero__canvas ${ready || gl === false ? 'is-ready' : ''}`}>
             {gl === false ? (
               <RobotSVG className="hero__fallback" />
             ) : gl ? (
-              <ErrorBoundary fallback={<RobotSVG className="hero__fallback" />}>
+              <ErrorBoundary fallback={<RobotSVG className="hero__fallback" />} onError={() => setReady(true)}>
               <Suspense fallback={null}>
-                <HeroScene active={near} reduce={!!reduce} interactive={finePointer && !reduce} />
+                <HeroScene active={near} reduce={!!reduce} interactive={finePointer && !reduce} onReady={() => setReady(true)} />
               </Suspense>
               </ErrorBoundary>
             ) : null}
           </div>
           <div className="hero__chips" aria-label="Live telemetry (simulated)">
             {hero.chips.map((c, i) => (
-              <Chip key={c.key} chip={c} reduce={reduce} delay={reduce ? 0 : 1.6 + i * 0.12} className={`hero__chip--${i}`} />
+              <Chip key={c.key} chip={c} reduce={reduce} delay={reduce ? 0 : 0.5 + i * 0.1} className={`hero__chip--${i}`} />
             ))}
           </div>
           <div className="hero__dim" aria-hidden="true">

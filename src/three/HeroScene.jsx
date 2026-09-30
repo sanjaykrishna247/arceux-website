@@ -6,15 +6,12 @@ import RobotModel, { POSES, applyPose } from './RobotModel.jsx';
 import { getMaterials } from './materials.js';
 import Studio from './Studio.jsx';
 
-const DRIVE_T = 1.9;
-const X0 = -3.8;
 const LIDAR = new THREE.Vector3(0.42, 0.3, 0);
 const SCAN_R = 3.4;
 
 const clamp01 = (v) => Math.min(1, Math.max(0, v));
 const smooth = (v) => v * v * (3 - 2 * v);
 const seg = (t, a, b) => smooth(clamp01((t - a) / (b - a)));
-const easeOutCubic = (v) => 1 - Math.pow(1 - v, 3);
 const lerp = (a, b, k) => a + (b - a) * k;
 
 /** A soft wedge that fades from its leading edge — the LiDAR scan cone. */
@@ -87,7 +84,7 @@ function Ghosts() {
   ));
 }
 
-function HeroRobot({ reduce, interactive }) {
+function HeroRobot({ reduce, interactive, onReady }) {
   const rig = useRef({});
   const root = useRef();
   const body = useRef();
@@ -100,48 +97,34 @@ function HeroRobot({ reduce, interactive }) {
   const points = useEnvironmentPoints();
   const M = getMaterials();
   const tmp = useMemo(() => new THREE.Object3D(), []);
-  const castorStart = [1.3, -0.9, 2.3, -1.7];
+  const readyFired = useRef(false);
 
   useFrame((state) => {
     const r = rig.current;
     if (t0.current === null) t0.current = state.clock.elapsedTime;
     const t = reduce ? 9 : state.clock.elapsedTime - t0.current;
 
-    // 1 · drive in
-    const k = clamp01(t / DRIVE_T);
-    const x = X0 * (1 - easeOutCubic(k));
-    const dist = x - X0;
-    root.current.position.x = x;
-    r.wheels?.forEach((w) => (w.rotation.z = -dist / 0.085));
-    r.castorWheels?.forEach((w) => (w.rotation.z = -dist / 0.035));
-    r.castorSwivel?.forEach((s, i) => (s.rotation.y = castorStart[i] * (1 - seg(t, 0, 0.6))));
-
-    // 2 · suspension settle
-    const tau = t - DRIVE_T + 0.25;
-    if (tau > 0 && !reduce) {
-      const damp = Math.exp(-4.2 * tau);
-      body.current.rotation.z = -0.022 * damp * Math.sin(12 * tau);
-      body.current.position.y = -0.007 * damp * Math.sin(12 * tau + 0.6);
-    } else {
-      body.current.rotation.z = 0;
-      body.current.position.y = 0;
+    // the robot is parked in place from the first frame (no drive-in)
+    if (onReady && !readyFired.current) {
+      readyFired.current = true;
+      requestAnimationFrame(() => onReady());
     }
 
-    // 3 · arm unfolds joint by joint, then the camera pans
+    // 1 · arm unfolds joint by joint straight away, then the camera pans
     const S = POSES.stow;
     const A = POSES.active;
-    const tp = Math.max(0, t - 4.4);
-    const pan = reduce ? 0 : 0.45 * Math.sin(0.42 * tp) * seg(t, 4.4, 5.4);
+    const tp = Math.max(0, t - 2.6);
+    const pan = reduce ? 0 : 0.45 * Math.sin(0.42 * tp) * seg(t, 2.6, 3.6);
     const glance = reduce ? 0 : 0.3 * Math.pow(Math.max(0, Math.sin(tp * 0.8 - 1.2)), 10);
     applyPose(r, {
-      yaw: lerp(S.yaw, A.yaw, seg(t, 2.1, 2.7)) + pan,
-      sh: lerp(S.sh, A.sh, seg(t, 2.5, 3.3)),
-      el: lerp(S.el, A.el, seg(t, 3.0, 3.8)),
-      tilt: lerp(S.tilt, A.tilt, seg(t, 3.5, 4.2)) - glance,
+      yaw: lerp(S.yaw, A.yaw, seg(t, 0.3, 0.9)) + pan,
+      sh: lerp(S.sh, A.sh, seg(t, 0.7, 1.5)),
+      el: lerp(S.el, A.el, seg(t, 1.2, 2.0)),
+      tilt: lerp(S.tilt, A.tilt, seg(t, 1.7, 2.3)) - glance,
     });
 
-    // 4 · idle loops: LiDAR, LED, scan cone, return dots
-    const on = seg(t, DRIVE_T - 0.2, DRIVE_T + 0.8);
+    // 2 · idle loops: LiDAR, LED, scan cone, return dots
+    const on = seg(t, 0, 0.6);
     if (r.lidarHead) r.lidarHead.rotation.y = t * 6;
     M.led.emissiveIntensity = reduce ? 1.2 : 0.4 + 1.2 * (0.5 + 0.5 * Math.sin(t * 2.2));
     const sweep = reduce ? 0.9 : t * 1.7;
@@ -163,7 +146,7 @@ function HeroRobot({ reduce, interactive }) {
 
   return (
     <>
-      <group ref={root} position={[reduce ? 0 : X0, 0, 0]}>
+      <group ref={root}>
         <group ref={body}>
           <RobotModel rig={rig} pose={reduce ? POSES.active : POSES.stow} />
         </group>
@@ -214,7 +197,7 @@ function Framing() {
   return null;
 }
 
-export default function HeroScene({ active = true, reduce = false, interactive = false }) {
+export default function HeroScene({ active = true, reduce = false, interactive = false, onReady }) {
   return (
     <Canvas
       dpr={[1, 1.75]}
@@ -225,7 +208,7 @@ export default function HeroScene({ active = true, reduce = false, interactive =
     >
       <Framing />
       <Studio />
-      <HeroRobot reduce={reduce} interactive={interactive} />
+      <HeroRobot reduce={reduce} interactive={interactive} onReady={onReady} />
       <Grid
         position={[0, 0.001, 0]}
         args={[30, 30]}

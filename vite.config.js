@@ -22,8 +22,37 @@ const cleanUrls = () => {
   };
 };
 
+// Each page's 3D scene is a lazy chunk. Preload it (and what it imports) from the HTML
+// so it downloads in parallel with the page script and the robot is there on arrival.
+const PRELOAD = { 'index.html': 'HeroScene', 'hardware.html': 'ExplodedScene' };
+const preload3D = () => ({
+  name: 'preload-3d',
+  apply: 'build',
+  transformIndexHtml: {
+    order: 'post',
+    handler(html, ctx) {
+      const want = PRELOAD[ctx.filename.split('/').pop()];
+      if (!want || !ctx.bundle) return html;
+      const entry = Object.values(ctx.bundle).find((c) => c.type === 'chunk' && c.isDynamicEntry && c.name === want);
+      if (!entry) return html;
+      const files = new Set();
+      const walk = (c) => {
+        if (!c || files.has(c.fileName)) return;
+        files.add(c.fileName);
+        c.imports.forEach((f) => walk(ctx.bundle[f]));
+      };
+      walk(entry);
+      return [...files].map((f) => ({
+        tag: 'link',
+        attrs: { rel: 'modulepreload', crossorigin: true, href: `/${f}` },
+        injectTo: 'head',
+      }));
+    },
+  },
+});
+
 export default defineConfig({
-  plugins: [react(), cleanUrls()],
+  plugins: [react(), cleanUrls(), preload3D()],
   build: {
     outDir: 'dist',
     // three.js lives in the lazily loaded 3D scene chunk, off the critical path.
