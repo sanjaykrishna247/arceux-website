@@ -19,7 +19,7 @@ const ANCHORS = [
   [0.26, 0.23, -0.08],
   [0.53, 0.52, 0.22],
   [0.2, 0.74, 0.3],
-  null, // arm: follows the camera head
+  null, // arm: follows the orange elbow joint (the black camera head is invisible on the dark stage)
 ];
 
 export function layerProgress(p, k) {
@@ -81,7 +81,10 @@ function Scene({ progress, overlay, labelled }) {
     const items = [];
     for (let k = 7; k >= 0; k--) {
       if (ANCHORS[k]) v.set(...ANCHORS[k]).add(r.layers[k].position);
-      else r.tilt.getWorldPosition(v);
+      else {
+        r.el.updateWorldMatrix(true, false);
+        r.el.getWorldPosition(v);
+      }
       v.project(camera);
       const sx = (v.x * 0.5 + 0.5) * w;
       const sy = (-v.y * 0.5 + 0.5) * h;
