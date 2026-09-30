@@ -3,6 +3,7 @@ import { animate, motion, useReducedMotion } from 'framer-motion';
 import { hero, links, linkProps } from '../content.js';
 import { hasWebGL, useMedia, useNearViewport } from '../hooks/useMedia.js';
 import RobotSVG from './RobotSVG.jsx';
+import ErrorBoundary from './ui/ErrorBoundary.jsx';
 import './Hero.css';
 
 // Start fetching the 3D scene immediately, in parallel with the first paint.
@@ -118,9 +119,11 @@ export default function Hero() {
             {gl === false ? (
               <RobotSVG className="hero__fallback" />
             ) : gl ? (
+              <ErrorBoundary fallback={<RobotSVG className="hero__fallback" />}>
               <Suspense fallback={null}>
                 <HeroScene active={near} reduce={!!reduce} interactive={finePointer && !reduce} />
               </Suspense>
+              </ErrorBoundary>
             ) : null}
           </div>
           <div className="hero__chips" aria-label="Live telemetry (simulated)">

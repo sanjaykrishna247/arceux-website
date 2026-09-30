@@ -1,14 +1,18 @@
-import { useEffect, useRef, useState } from 'react';
+import { Suspense, lazy, useEffect, useRef, useState } from 'react';
 import { animate, useMotionValue, useReducedMotion } from 'framer-motion';
 import { hardware } from '../content.js';
 import { hasWebGL, useMedia } from '../hooks/useMedia.js';
-import ExplodedScene, { sequentialProgress } from '../three/ExplodedScene.jsx';
+import { sequentialProgress } from '../three/layerTiming.js';
 import ComponentGrid from '../components/ComponentGrid.jsx';
+import ErrorBoundary from '../components/ui/ErrorBoundary.jsx';
 import Footer from '../components/Footer.jsx';
 import { Logo } from '../components/Nav.jsx';
 import '../components/Nav.css';
 import '../components/ExplodedView.css';
 import './HardwarePage.css';
+
+// 3D loads as its own chunk, so the page text and controls show even if it can't load.
+const ExplodedScene = lazy(() => import('../three/ExplodedScene.jsx'));
 
 const EASE = [0.45, 0, 0.2, 1];
 
@@ -146,7 +150,13 @@ export default function HardwarePage() {
             onPointerUp={onPointerUp}
             onPointerCancel={onPointerUp}
           >
-            {gl && <ExplodedScene progress={progress} overlay={overlay} labelled={!phone} lp={sequentialProgress} yaw={yaw} />}
+            {gl && (
+              <ErrorBoundary fallback={<p className="mono hw__nogl">The 3D view couldn’t start on this device. The layers are listed below.</p>}>
+                <Suspense fallback={null}>
+                  <ExplodedScene progress={progress} overlay={overlay} labelled={!phone} lp={sequentialProgress} yaw={yaw} />
+                </Suspense>
+              </ErrorBoundary>
+            )}
             {gl && (
               <>
                 <svg className="xv__lines" aria-hidden="true">

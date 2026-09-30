@@ -4,6 +4,7 @@ import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { ContactShadows } from '@react-three/drei';
 import RobotModel, { POSES } from './RobotModel.jsx';
 import Studio from './Studio.jsx';
+import { layerProgress, sequentialProgress } from './layerTiming.js';
 
 export const GAP = 0.4;
 const NAV_SPACE = 96; // px kept clear under the floating header
@@ -22,16 +23,7 @@ const ANCHORS = [
   null, // arm: follows the orange elbow joint (the black camera head is invisible on the dark stage)
 ];
 
-export function layerProgress(p, k) {
-  const start = (7 - k) * 0.035;
-  return smooth(clamp01((p - start) / 0.72));
-}
-
-/** Strictly one after another, arm first: each layer gets its own slice of the timeline. */
-export function sequentialProgress(p, k) {
-  const start = (7 - k) * 0.1;
-  return smooth(clamp01((p - start) / 0.3));
-}
+export { layerProgress, sequentialProgress };
 
 function Scene({ progress, overlay, labelled, lp = layerProgress, yaw }) {
   const rig = useRef({});
