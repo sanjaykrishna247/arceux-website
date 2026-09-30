@@ -1,4 +1,4 @@
-import { meet } from '../content.js';
+import { meet, problem } from '../content.js';
 import SectionLabel from './ui/SectionLabel.jsx';
 import { Reveal, RevealItem } from './ui/Reveal.jsx';
 import RobotSVG from './RobotSVG.jsx';
@@ -47,6 +47,30 @@ export default function MeetRobot() {
           </RevealItem>
           <RevealItem as="p" className="lead">
             {meet.lead}
+          </RevealItem>
+        </Reveal>
+
+        <Reveal className="ps card" amount={0.2}>
+          <RevealItem className="ps__id">
+            <span className="mono ps__k">SIH 2026 · Problem statement</span>
+            <span className="ps__num">{problem.id}</span>
+          </RevealItem>
+          <RevealItem className="ps__body">
+            <h3 className="ps__title">{problem.title}</h3>
+            <p className="muted">{problem.summary}</p>
+            <dl className="ps__meta mono">
+              {[
+                ['Organization', problem.organization],
+                ['Department', problem.department],
+                ['Theme', problem.theme],
+                ['Category', problem.category],
+              ].map(([k, v]) => (
+                <div key={k}>
+                  <dt>{k}</dt>
+                  <dd>{v}</dd>
+                </div>
+              ))}
+            </dl>
           </RevealItem>
         </Reveal>
 

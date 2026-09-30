@@ -19,6 +19,18 @@ export const meta = {
   teamName: 'Team Krenoviantz',
 };
 
+// Smart India Hackathon 2026 problem statement this project answers.
+export const problem = {
+  id: '26112',
+  title: 'Design and Develop a Modular Autonomous Mobile Robot (AMR) Platform for Smart Warehouse Automation',
+  summary:
+    'A universal AMR/AGV chassis that serves as a common mobile platform for warehouse automation and supports interchangeable attachments, balancing structural integrity, payload capacity, weight, modularity, manufacturability and ease of maintenance.',
+  organization: 'Autodesk',
+  department: 'Autodesk Education Experience',
+  theme: 'Robotics and Drones',
+  category: 'Hardware',
+};
+
 export const nav = [
   { id: 'product', label: 'Product' },
   { id: 'how', label: 'How it works' },
@@ -30,7 +42,7 @@ export const nav = [
 ];
 
 export const hero = {
-  kicker: 'SMART INDIA HACKATHON 2026 · ROBOTICS & SMART AUTOMATION',
+  kicker: 'SMART INDIA HACKATHON 2026 · PROBLEM STATEMENT 26112 · AUTODESK',
   title: ['One robot.', 'Tow, map, inspect.'],
   subtitle:
     'A multipurpose autonomous mobile robot that hauls up to 150 kg, navigates factory floors with LiDAR SLAM, and inspects racks and machinery with a high-resolution camera on a 4-DOF arm.',
@@ -308,5 +320,5 @@ export const team = {
 
 export const footer = {
   blurb: 'A multipurpose autonomous mobile robot for material handling and industrial inspection.',
-  bottom: 'Smart India Hackathon 2026 · Theme: Robotics & Drones / Smart Automation · Category: Hardware',
+  bottom: 'Smart India Hackathon 2026 · Problem Statement 26112 · Organization: Autodesk · Theme: Robotics and Drones · Category: Hardware',
 };
