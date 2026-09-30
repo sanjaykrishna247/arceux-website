@@ -440,8 +440,12 @@
 }
 .footer__cols {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  /* the contact column gets extra room so the email stays on one line */
+  grid-template-columns: 1fr 1fr 1.5fr;
   gap: 24px;
+}
+.footer__mail {
+  white-space: nowrap;
 }
 .footer__cols h2 {
   margin: 0 0 16px;
@@ -464,7 +468,6 @@
   color: var(--on-dark);
   font-size: 15px;
   opacity: 0.85;
-  word-break: break-all;
 }
 .footer__cols a:hover {
   opacity: 1;
