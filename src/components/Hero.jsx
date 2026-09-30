@@ -69,7 +69,6 @@ export default function Hero() {
   const finePointer = useMedia('(hover: hover) and (pointer: fine)');
   // checked synchronously so the 3D canvas mounts on the very first render
   const [gl] = useState(hasWebGL);
-  const [ready, setReady] = useState(false); // first 3D frame drawn
 
   const item = (i) => ({
     initial: reduce ? false : { opacity: 0, y: 16 },
@@ -116,13 +115,13 @@ export default function Hero() {
         </div>
 
         <div className="hero__stage" ref={stage}>
-          <div className={`hero__canvas ${ready || gl === false ? 'is-ready' : ''}`}>
+          <div className="hero__canvas">
             {gl === false ? (
               <RobotSVG className="hero__fallback" />
             ) : gl ? (
-              <ErrorBoundary fallback={<RobotSVG className="hero__fallback" />} onError={() => setReady(true)}>
+              <ErrorBoundary fallback={<RobotSVG className="hero__fallback" />}>
               <Suspense fallback={null}>
-                <HeroScene active={near} reduce={!!reduce} interactive={finePointer && !reduce} onReady={() => setReady(true)} />
+                <HeroScene active={near} reduce={!!reduce} interactive={finePointer && !reduce} />
               </Suspense>
               </ErrorBoundary>
             ) : null}
