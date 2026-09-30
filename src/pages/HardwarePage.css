@@ -51,15 +51,6 @@
   user-select: none;
   -webkit-user-select: none;
 }
-.hw__stage::before {
-  /* showroom backdrop: soft spotlight behind the robot and a glow where it stands */
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(38% 46% at 50% 44%, rgba(160, 190, 235, 0.13), rgba(160, 190, 235, 0) 70%),
-    radial-gradient(30% 7% at 48% 86%, rgba(232, 98, 44, 0.12), rgba(232, 98, 44, 0) 75%);
-  pointer-events: none;
-}
 .hw__stage:active {
   cursor: grabbing;
 }
