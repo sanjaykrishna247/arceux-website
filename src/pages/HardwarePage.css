@@ -109,3 +109,16 @@
     padding: 14px var(--gutter) 18px;
   }
 }
+
+/* the robot is present from the start: a short fade/settle once its first frame is drawn */
+.hw__canvas {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transform: scale(0.985);
+  transition: opacity 0.45s var(--ease), transform 0.6s var(--ease);
+}
+.hw__canvas.is-ready {
+  opacity: 1;
+  transform: none;
+}

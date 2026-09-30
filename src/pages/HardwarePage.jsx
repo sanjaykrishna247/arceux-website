@@ -12,7 +12,9 @@ import '../components/ExplodedView.css';
 import './HardwarePage.css';
 
 // 3D loads as its own chunk, so the page text and controls show even if it can't load.
-const ExplodedScene = lazy(() => import('../three/ExplodedScene.jsx'));
+// Start fetching it the moment this script runs, in parallel with the first render.
+const sceneModule = import('../three/ExplodedScene.jsx');
+const ExplodedScene = lazy(() => sceneModule);
 
 const EASE = [0.45, 0, 0.2, 1];
 
@@ -24,7 +26,8 @@ const EASE = [0.45, 0, 0.2, 1];
 export default function HardwarePage() {
   const reduce = useReducedMotion();
   const phone = useMedia('(max-width: 900px)');
-  const [gl, setGl] = useState(false);
+  const [gl] = useState(hasWebGL);
+  const [ready, setReady] = useState(false); // first 3D frame drawn
   const [state, setState] = useState('separating'); // separating | separated | joining | joined
   const progress = useMotionValue(reduce ? 1 : 0);
   const yaw = useRef(0);
@@ -34,7 +37,6 @@ export default function HardwarePage() {
   const overlay = useRef({ labels: [], lines: [], dots: [], counter: null });
   const o = overlay.current;
 
-  useEffect(() => setGl(hasWebGL()), []);
 
   const go = (to, duration) => {
     ctl.current?.stop();
@@ -58,16 +60,20 @@ export default function HardwarePage() {
     separate();
   };
 
-  // separate layer by layer as soon as the page opens
+  // the robot shows up assembled; once it's on screen, it separates layer by layer
   useEffect(() => {
-    const t = setTimeout(separate, 600);
-    return () => {
-      clearTimeout(t);
+    if (!ready) return;
+    const t = setTimeout(separate, 450);
+    return () => clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ready]);
+  useEffect(
+    () => () => {
       clearTimeout(resumeTimer.current);
       ctl.current?.stop();
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    },
+    []
+  );
 
   // drag to rotate: the stack rejoins while moving, separates again after release
   const onPointerDown = (e) => {
@@ -152,9 +158,19 @@ export default function HardwarePage() {
           >
             {gl && (
               <ErrorBoundary fallback={<p className="mono hw__nogl">The 3D view couldn’t start on this device. The layers are listed below.</p>}>
-                <Suspense fallback={null}>
-                  <ExplodedScene progress={progress} overlay={overlay} labelled={!phone} lp={sequentialProgress} yaw={yaw} showcase />
-                </Suspense>
+                <div className={`hw__canvas ${ready ? 'is-ready' : ''}`}>
+                  <Suspense fallback={null}>
+                    <ExplodedScene
+                      progress={progress}
+                      overlay={overlay}
+                      labelled={!phone}
+                      lp={sequentialProgress}
+                      yaw={yaw}
+                      showcase
+                      onReady={() => setReady(true)}
+                    />
+                  </Suspense>
+                </div>
               </ErrorBoundary>
             )}
             {gl && (

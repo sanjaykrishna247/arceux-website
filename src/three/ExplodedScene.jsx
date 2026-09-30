@@ -28,13 +28,14 @@ export { layerProgress, sequentialProgress };
 // then return to true size when the robot reassembles. Index = layer (bottom → top).
 const MAGNIFY = [1, 1.15, 1.35, 1.8, 1.8, 1, 1, 1];
 
-function Scene({ progress, overlay, labelled, lp = layerProgress, yaw, showcase }) {
+function Scene({ progress, overlay, labelled, lp = layerProgress, yaw, showcase, onReady }) {
   const rig = useRef({});
   const spin = useRef();
   const { camera, size } = useThree();
   const v = useMemo(() => new THREE.Vector3(), []);
   const target = useMemo(() => new THREE.Vector3(), []);
   const centers = useRef(null);
+  const readyFired = useRef(false);
 
   useEffect(() => {
     const { width: w, height: h } = size;
@@ -55,6 +56,11 @@ function Scene({ progress, overlay, labelled, lp = layerProgress, yaw, showcase 
     if (showcase && !centers.current) {
       // layer centres at rest, so magnified layers scale about their own middle
       centers.current = r.layers.map((g) => new THREE.Box3().setFromObject(g).getCenter(new THREE.Vector3()));
+    }
+    if (onReady && !readyFired.current) {
+      // tell the page once the robot is actually on screen (after this frame is drawn)
+      readyFired.current = true;
+      requestAnimationFrame(() => onReady());
     }
     r.layers.forEach((g, k) => {
       const l = lp(p, k);
@@ -163,7 +169,7 @@ function Scene({ progress, overlay, labelled, lp = layerProgress, yaw, showcase 
   );
 }
 
-export default function ExplodedScene({ progress, overlay, labelled = true, active = true, lp, yaw, showcase = false }) {
+export default function ExplodedScene({ progress, overlay, labelled = true, active = true, lp, yaw, showcase = false, onReady }) {
   return (
     <Canvas
       dpr={[1, 1.75]}
@@ -173,7 +179,7 @@ export default function ExplodedScene({ progress, overlay, labelled = true, acti
       aria-hidden="true"
     >
       <Studio dark showcase={showcase} />
-      <Scene progress={progress} overlay={overlay} labelled={labelled} lp={lp} yaw={yaw} showcase={showcase} />
+      <Scene progress={progress} overlay={overlay} labelled={labelled} lp={lp} yaw={yaw} showcase={showcase} onReady={onReady} />
       <ContactShadows position={[0, 0.001, 0]} scale={8} blur={2.6} far={1.2} opacity={0.7} resolution={256} color="#000" />
     </Canvas>
   );
