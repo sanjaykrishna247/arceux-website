@@ -153,7 +153,7 @@ export default function HardwarePage() {
             {gl && (
               <ErrorBoundary fallback={<p className="mono hw__nogl">The 3D view couldn’t start on this device. The layers are listed below.</p>}>
                 <Suspense fallback={null}>
-                  <ExplodedScene progress={progress} overlay={overlay} labelled={!phone} lp={sequentialProgress} yaw={yaw} />
+                  <ExplodedScene progress={progress} overlay={overlay} labelled={!phone} lp={sequentialProgress} yaw={yaw} showcase />
                 </Suspense>
               </ErrorBoundary>
             )}
