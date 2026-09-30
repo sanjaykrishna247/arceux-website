@@ -44,8 +44,7 @@
   flex: none;
 }
 .hero__title {
-  /* sized so "Tow, map, inspect." fits its column on one line */
-  font-size: clamp(40px, 4.5vw, 78px);
+  font-size: clamp(44px, 5.3vw, 86px);
   line-height: 1.04;
   margin-bottom: 30px;
   padding-bottom: 0.08em;
@@ -54,12 +53,6 @@
   font-style: italic;
   font-weight: 300;
   color: var(--ink-2);
-}
-@media (min-width: 961px) {
-  /* keep the second line together: "Tow, map, inspect." never breaks on desktop */
-  .hero__title em {
-    white-space: nowrap;
-  }
 }
 .hero__sub {
   margin-bottom: 36px;
