@@ -128,7 +128,7 @@ export default function Hero() {
           </div>
           <div className="hero__chips" aria-label="Live telemetry (simulated)">
             {hero.chips.map((c, i) => (
-              <Chip key={c.key} chip={c} reduce={reduce} delay={reduce ? 0 : 0.5 + i * 0.1} className={`hero__chip--${i}`} />
+              <Chip key={c.key} chip={c} reduce={reduce} delay={reduce ? 0 : 1.6 + i * 0.12} className={`hero__chip--${i}`} />
             ))}
           </div>
           <div className="hero__dim" aria-hidden="true">
