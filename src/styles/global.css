@@ -1,0 +1,400 @@
+:root {
+  --bg: #f1f4f8;
+  --bg-2: #e6ebf2;
+  --paper: #fafbfd;
+  --ink: #14161a;
+  --ink-2: #3b3f47;
+  --muted: #5d626b;
+  --line: rgba(24, 36, 56, 0.12);
+  --line-2: rgba(20, 22, 26, 0.2);
+  --grid: rgba(30, 50, 80, 0.05);
+
+  --navy: #14213d;
+  --graphite: #16181d;
+  --graphite-2: #1d2027;
+  --on-dark: #eceae4;
+  --on-dark-muted: #a3a7b0;
+  --line-dark: rgba(236, 234, 228, 0.12);
+
+  --accent: #e8622c;
+  --accent-ink: #b8461a;
+  --ok: #1f9d6b;
+  --tote: #2f7fd6;
+
+  --serif: 'Fraunces', 'Iowan Old Style', Georgia, serif;
+  --sans: 'Manrope', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  /* Segoe UI on Windows; macOS/Linux fall back to their native UI font */
+  --ui: 'Segoe UI', 'Segoe UI Variable Text', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  --mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --radius: 14px;
+  --gutter: clamp(16px, 4vw, 40px);
+  --max: 1280px;
+  --nav-h: 76px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: var(--nav-h);
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background-color: var(--bg);
+  background-image: linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 48px 48px;
+  background-position: -1px -1px;
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 17px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: clip;
+}
+
+img,
+svg,
+canvas {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  color: inherit;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+::selection {
+  background: var(--accent);
+  color: #fff;
+}
+
+.skip-link {
+  position: absolute;
+  left: 16px;
+  top: -60px;
+  z-index: 100;
+  padding: 10px 16px;
+  background: var(--ink);
+  color: var(--bg);
+  border-radius: 8px;
+  font-family: var(--mono);
+  font-size: 13px;
+  text-decoration: none;
+}
+.skip-link:focus {
+  top: 12px;
+}
+
+.container {
+  width: 100%;
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+
+.section {
+  position: relative;
+  padding: clamp(88px, 12vw, 160px) 0;
+}
+
+.section--dark {
+  background: var(--graphite);
+  color: var(--on-dark);
+  background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+.section--navy {
+  background-color: var(--navy);
+}
+.section--paper {
+  background: var(--paper);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+/* ── Type ─────────────────────────────────────── */
+.display {
+  font-family: var(--serif);
+  font-weight: 300;
+  font-variation-settings: 'opsz' 144;
+  letter-spacing: -0.025em;
+  line-height: 1;
+  margin: 0;
+}
+.h2 {
+  font-family: var(--serif);
+  font-weight: 300;
+  font-variation-settings: 'opsz' 120;
+  font-size: clamp(34px, 5vw, 66px);
+  line-height: 1.04;
+  letter-spacing: -0.022em;
+  margin: 0;
+  max-width: 17ch;
+  text-wrap: balance;
+}
+.h3 {
+  font-family: var(--sans);
+  font-weight: 600;
+  font-size: 19px;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+.lead {
+  font-size: clamp(17px, 1.5vw, 20px);
+  line-height: 1.6;
+  color: var(--ink-2);
+  max-width: 58ch;
+  margin: 0;
+}
+.section--dark .lead {
+  color: var(--on-dark-muted);
+}
+.mono {
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.muted {
+  color: var(--muted);
+}
+.tnum {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Section label: 01 ──── MEET THE ROBOT ─────── */
+.section-label {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 28px;
+}
+.section-label__index {
+  color: var(--accent-ink);
+  font-weight: 500;
+}
+.section--dark .section-label {
+  color: var(--on-dark-muted);
+}
+.section--dark .section-label__index {
+  color: var(--accent);
+}
+.section-label__rule {
+  width: 56px;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.5;
+}
+
+.section-head {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+  margin-bottom: clamp(48px, 7vw, 88px);
+}
+@media (min-width: 960px) {
+  .section-head--split {
+    grid-template-columns: 1.1fr 0.9fr;
+    align-items: end;
+    gap: 64px;
+  }
+}
+
+/* ── Buttons ─────────────────────────────────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 48px;
+  padding: 0 22px;
+  border-radius: 999px;
+  font-family: var(--ui);
+  font-weight: 600;
+  font-size: 15px;
+  letter-spacing: -0.005em;
+  text-decoration: none;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: transform 0.25s var(--ease), background-color 0.25s var(--ease), border-color 0.25s var(--ease),
+    color 0.25s var(--ease);
+}
+.btn:hover {
+  transform: translateY(-1px);
+}
+.btn--primary {
+  background: var(--ink);
+  color: var(--bg);
+}
+.btn--primary:hover {
+  background: #000;
+}
+.btn--ghost {
+  border-color: var(--line-2);
+  background: transparent;
+}
+.btn--ghost:hover {
+  border-color: var(--ink);
+}
+.btn--accent {
+  background: var(--accent);
+  color: #fff;
+}
+.btn--accent:hover {
+  background: var(--accent-ink);
+}
+.btn--sm {
+  min-height: 38px;
+  padding: 0 16px;
+  font-size: 14px;
+}
+.btn__arrow {
+  transition: transform 0.25s var(--ease);
+}
+.btn:hover .btn__arrow {
+  transform: translateX(3px);
+}
+.section--dark .btn--ghost {
+  border-color: var(--line-dark);
+  color: var(--on-dark);
+}
+.section--dark .btn--ghost:hover {
+  border-color: var(--on-dark);
+}
+
+/* ── Telemetry chip ──────────────────────────── */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 11px;
+  border: 1px solid var(--line);
+  background: rgba(250, 251, 253, 0.92);
+  border-radius: 8px;
+  font-family: var(--mono);
+  font-size: 11.5px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--ink);
+  box-shadow: 0 1px 0 rgba(20, 22, 26, 0.03), 0 8px 24px -12px rgba(20, 22, 26, 0.18);
+  font-variant-numeric: tabular-nums;
+}
+.chip__label {
+  color: var(--muted);
+}
+.chip__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  flex: none;
+}
+.chip__dot--ok {
+  background: var(--ok);
+}
+.section--dark .chip {
+  background: rgba(29, 32, 39, 0.9);
+  border-color: var(--line-dark);
+  color: var(--on-dark);
+}
+.section--dark .chip__label {
+  color: var(--on-dark-muted);
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 12px;
+  border: 1px solid var(--line-2);
+  border-radius: 999px;
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.02em;
+}
+.section--dark .tag {
+  border-color: var(--line-dark);
+  color: var(--on-dark);
+}
+
+/* hairline card */
+.card {
+  position: relative;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  border-radius: var(--radius);
+}
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* Segoe UI for interface text: navigation, leads, card copy and lists */
+.nav__links a,
+.lead,
+.h3,
+.callout__body p,
+.meet__col li,
+.mission__stitle,
+.mission__sbody,
+.stat__label,
+.cgrid__name,
+.cgrid__role,
+.dd__text > p,
+.armx__dl dt,
+.oc__list li,
+.sheet__row dt,
+.why__t,
+.why__card p,
+.road__item p,
+.member__name,
+.member__line,
+.footer__brand p,
+.footer__cols a {
+  font-family: var(--ui);
+}

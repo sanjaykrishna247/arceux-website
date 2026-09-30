@@ -1,0 +1,131 @@
+.meet__cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border-top: 1px solid var(--ink);
+  margin-bottom: clamp(56px, 8vw, 96px);
+}
+.meet__col {
+  padding: 28px 0 8px;
+}
+.meet__col + .meet__col {
+  border-left: 1px solid var(--line);
+  padding-left: clamp(24px, 4vw, 56px);
+}
+.meet__col-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 20px;
+  padding-right: clamp(24px, 4vw, 56px);
+}
+.meet__col-tag {
+  color: var(--accent-ink);
+  order: 2;
+}
+.meet__col-title {
+  font-family: var(--serif);
+  font-weight: 300;
+  font-size: clamp(28px, 3vw, 40px);
+  letter-spacing: -0.015em;
+  margin: 0;
+}
+.meet__col ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.meet__col li {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--line);
+  font-weight: 500;
+  margin-right: clamp(24px, 4vw, 56px);
+}
+.meet__tick {
+  width: 14px;
+  height: 1px;
+  background: var(--accent);
+  flex: none;
+}
+
+.callouts {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+.callout {
+  overflow: hidden;
+}
+.callout__fig {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  background: linear-gradient(180deg, #fff, var(--bg-2));
+  border-bottom: 1px solid var(--line);
+  background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px),
+    linear-gradient(180deg, #fff, var(--bg-2));
+  background-size: 24px 24px, 24px 24px, auto;
+}
+.callout__fig--split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+.callout__fig--split .callout__svg + .callout__svg {
+  border-left: 1px dashed var(--line-2);
+}
+.callout__svg {
+  width: 100%;
+  height: 100%;
+}
+.callout__tag {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  font-size: 10.5px;
+  padding: 4px 8px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+}
+.callout__zoom {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  font-size: 10.5px;
+  color: var(--muted);
+}
+.callout__body {
+  padding: 22px 22px 26px;
+}
+.callout__body p {
+  margin: 8px 0 0;
+  font-size: 15px;
+}
+
+@media (max-width: 900px) {
+  .callouts {
+    grid-template-columns: 1fr;
+  }
+  .callout {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 720px) {
+  .meet__cols {
+    grid-template-columns: 1fr;
+  }
+  .meet__col + .meet__col {
+    border-left: 0;
+    padding-left: 0;
+    border-top: 1px solid var(--line);
+    margin-top: 24px;
+  }
+  .meet__col-head,
+  .meet__col li {
+    padding-right: 0;
+    margin-right: 0;
+  }
+}

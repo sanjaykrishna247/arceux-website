@@ -1,0 +1,184 @@
+.mission {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+  gap: clamp(24px, 4vw, 56px);
+  align-items: start;
+}
+.mission__map {
+  position: relative;
+  padding: 12px;
+  background: #fff;
+}
+.mission__map svg {
+  width: 100%;
+  height: auto;
+}
+.mission__hud {
+  position: absolute;
+  top: 22px;
+  right: 22px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  z-index: 1;
+}
+.mission__txt {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  fill: var(--muted);
+}
+.mission__txt--light {
+  fill: #fff;
+}
+.mission__txt--muted {
+  fill: #a3a7b0;
+}
+.mission__fade {
+  transition: opacity 0.35s var(--ease);
+}
+.mission__planned {
+  transition: none;
+}
+
+.mission__steps ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--ink);
+}
+.mission__steps li {
+  position: relative;
+  border-bottom: 1px solid var(--line);
+}
+.mission__steps button {
+  display: flex;
+  gap: 18px;
+  width: 100%;
+  padding: 18px 0;
+  text-align: left;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+.mission__num {
+  color: var(--muted);
+  padding-top: 3px;
+  flex: none;
+}
+.mission__stext {
+  display: grid;
+  gap: 4px;
+}
+.mission__stitle {
+  font-weight: 600;
+  font-size: 17px;
+  color: var(--muted);
+  transition: color 0.3s var(--ease);
+}
+.mission__sbody {
+  font-size: 14.5px;
+  line-height: 1.55;
+  color: var(--muted);
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transition: opacity 0.4s var(--ease);
+  max-height: 0;
+  overflow: hidden;
+}
+.mission__steps li.is-active .mission__stitle,
+.mission__steps li.is-done .mission__stitle {
+  color: var(--ink);
+}
+.mission__steps li.is-active .mission__num {
+  color: var(--accent-ink);
+}
+.mission__steps li.is-active .mission__sbody {
+  opacity: 1;
+  max-height: 120px;
+}
+.mission__bar {
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  height: 2px;
+  width: 100%;
+  background: var(--accent);
+  transform-origin: left;
+  animation: stepbar linear forwards;
+}
+@keyframes stepbar {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+.mission__stepper {
+  display: none;
+}
+.mission__stepper-text {
+  min-height: 150px;
+}
+.mission__stepper-text .h3 {
+  margin: 6px 0 6px;
+}
+.mission__stepper-text p {
+  margin: 0;
+  font-size: 15px;
+}
+.mission__stepper-ctl {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 12px;
+}
+.mission__stepper-ctl .btn:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+.mission__dots {
+  display: flex;
+  gap: 6px;
+}
+.mission__dots span {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--line-2);
+  transition: background-color 0.3s, transform 0.3s;
+}
+.mission__dots span.on {
+  background: var(--accent);
+  transform: scale(1.3);
+}
+
+@media (max-width: 860px) {
+  .mission {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  .mission__steps {
+    display: none;
+  }
+  .mission__stepper {
+    display: block;
+  }
+  .mission__map {
+    padding: 4px;
+    margin: 0 calc(-1 * var(--gutter) + 8px);
+  }
+  .mission__hud {
+    position: static;
+    justify-content: flex-start;
+    padding: 8px 8px 0;
+  }
+  .mission__hud .chip {
+    font-size: 10px;
+  }
+}

@@ -1,0 +1,127 @@
+.ng {
+  border: 1px solid var(--line-dark);
+  border-radius: var(--radius);
+  padding: clamp(12px, 3vw, 36px);
+  background: rgba(255, 255, 255, 0.02);
+}
+.ng__svg {
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+.ng__edge {
+  fill: none;
+  stroke: rgba(236, 234, 228, 0.35);
+  stroke-width: 1.5;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  transition: stroke-dashoffset 0.9s var(--ease);
+}
+.ng.is-in .ng__edge {
+  stroke-dashoffset: 0;
+}
+.ng__topic {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  fill: var(--on-dark-muted);
+  opacity: 0;
+  transition: opacity 0.5s var(--ease);
+  dominant-baseline: text-after-edge;
+}
+.ng.is-in .ng__topic {
+  opacity: 1;
+}
+.ng__packet {
+  fill: var(--accent);
+}
+.ng__node {
+  opacity: 0;
+  transition: opacity 0.5s var(--ease);
+}
+.ng.is-in .ng__node {
+  opacity: 1;
+}
+.ng__node rect {
+  fill: #1b2a4a;
+  stroke: rgba(236, 234, 228, 0.28);
+  stroke-width: 1;
+}
+.ng__node text {
+  font-family: var(--mono);
+  font-size: 12.5px;
+  fill: var(--on-dark);
+}
+.ng__node--core rect {
+  fill: #22355c;
+  stroke: var(--accent);
+}
+.ng__node--hw rect {
+  fill: #0f1a30;
+  stroke: #1f9d6b;
+}
+.ng__dot {
+  fill: var(--accent);
+}
+
+.ng__legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+  margin-top: 18px;
+  color: var(--on-dark-muted);
+  font-size: 10.5px;
+}
+.ng__legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.ng__lg {
+  width: 14px;
+  height: 10px;
+  border-radius: 3px;
+  border: 1px solid rgba(236, 234, 228, 0.4);
+  background: #1b2a4a;
+}
+.ng__lg--sensor {
+  border-color: rgba(236, 234, 228, 0.4);
+  box-shadow: inset 4px 0 0 var(--accent);
+}
+.ng__lg--core {
+  border-color: var(--accent);
+}
+.ng__lg--hw {
+  border-color: #1f9d6b;
+}
+.ng__lg--pkt {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: 0;
+}
+.ng__stack {
+  list-style: none;
+  padding: 0;
+  margin: 32px 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+@media (max-width: 720px) {
+  .ng__node text {
+    font-size: 11px;
+  }
+}
+
+.ng__node--data rect {
+  fill: transparent;
+  stroke: rgba(236, 234, 228, 0.5);
+  stroke-dasharray: 4 4;
+  rx: 22px;
+}
+.ng__node--net rect {
+  fill: #2a1f4a;
+  stroke: #9b7be0;
+}
