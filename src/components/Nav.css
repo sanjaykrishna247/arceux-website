@@ -42,9 +42,9 @@
   letter-spacing: 0.12em;
   color: var(--ink);
 }
-.logo svg {
-  width: 24px;
-  height: 24px;
+.logo__mark {
+  flex: none;
+  border-radius: 50%;
 }
 .nav__links ul {
   display: flex;

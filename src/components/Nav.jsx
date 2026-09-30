@@ -1,16 +1,12 @@
 import { useEffect, useState } from 'react';
 import { nav, links, linkProps } from '../content.js';
+import LogoMark from './ui/LogoMark.jsx';
 import './Nav.css';
 
 export function Logo() {
   return (
     <a href="#top" className="logo" aria-label="ARCEUX home">
-      <svg viewBox="0 0 28 28" width="28" height="28" aria-hidden="true">
-        <rect x="1" y="1" width="26" height="26" rx="7" fill="currentColor" />
-        <rect x="6" y="14" width="16" height="5" rx="1.5" fill="var(--bg)" />
-        <rect x="7.5" y="9" width="9" height="5" rx="1" fill="#2f7fd6" />
-        <circle cx="20" cy="9.5" r="2.2" fill="#e8622c" />
-      </svg>
+      <LogoMark size={30} className="logo__mark" />
       <span>ARCEUX</span>
     </a>
   );

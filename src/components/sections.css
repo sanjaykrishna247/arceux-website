@@ -422,8 +422,8 @@
 .footer .logo {
   color: var(--on-dark);
 }
-.footer .logo rect:nth-child(2) {
-  fill: var(--ink);
+.footer .logo__mark {
+  box-shadow: 0 0 0 1px rgba(236, 234, 228, 0.3);
 }
 .footer__top {
   display: grid;
