@@ -60,10 +60,8 @@ function Scene({ progress, overlay, labelled, lp = layerProgress, yaw }) {
     if (r.lidarHead) r.lidarHead.rotation.y = state.clock.elapsedTime * 3;
     if (!labelled) spin.current.rotation.y = Math.sin(state.clock.elapsedTime * 0.25) * 0.25;
 
-    // camera pulls back and rises with the stack's real height (not the timeline),
-    // so layers that lift early, like the arm in sequential mode, never leave the frame
-    let pe = 0;
-    for (let k = 1; k < 8; k++) pe = Math.max(pe, (lp(p, k) * k) / 7);
+    // camera pulls back and rises as the stack grows
+    const pe = smooth(clamp01(p));
     const az = 0.55 + 0.35 * pe + (yaw?.current ?? 0);
     const el = 0.34 - 0.16 * pe;
     // fit the growing stack into the height left below the header (with a margin)
