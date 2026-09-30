@@ -3,13 +3,14 @@ import { Logo } from './Nav.jsx';
 import Icon from './ui/Icons.jsx';
 import './sections.css';
 
-export default function Footer() {
+/** `base` prefixes in-page anchors, e.g. "/" when the footer is used on /hardware. */
+export default function Footer({ base = '' }) {
   return (
     <footer className="footer">
       <div className="container">
         <div className="footer__top">
           <div className="footer__brand">
-            <Logo />
+            <Logo href={base ? base : '#top'} />
             <p>{footer.blurb}</p>
           </div>
           <nav className="footer__cols" aria-label="Footer">
@@ -18,7 +19,7 @@ export default function Footer() {
               <ul>
                 {nav.map((n) => (
                   <li key={n.id}>
-                    <a href={`#${n.id}`}>{n.label}</a>
+                    <a href={`${base}#${n.id}`}>{n.label}</a>
                   </li>
                 ))}
               </ul>
@@ -27,7 +28,10 @@ export default function Footer() {
               <h2 className="mono">Project</h2>
               <ul>
                 <li>
-                  <a href="#team">Team</a>
+                  <a href={`${base}#team`}>Team</a>
+                </li>
+                <li>
+                  <a href="/hardware">Hardware part details</a>
                 </li>
                 <li>
                   <a {...linkProps(links.console)}>Platform{links.console.startsWith('http') ? ' ↗' : ''}</a>

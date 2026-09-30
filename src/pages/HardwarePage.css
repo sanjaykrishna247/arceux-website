@@ -1,0 +1,124 @@
+/* ── /hardware: stand-alone layer-by-layer teardown ── */
+.hw {
+  position: relative;
+  padding: 0;
+}
+.hw__head {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  padding-top: calc(var(--nav-h) + 40px);
+  pointer-events: none;
+}
+.hw__head > * {
+  max-width: 340px;
+}
+.hw__title {
+  font-size: clamp(32px, 3.2vw, 48px);
+}
+.hw__lead {
+  margin-top: 16px;
+  font-size: 15.5px !important;
+}
+.hw__count {
+  margin: 26px 0 0;
+  color: var(--on-dark-muted);
+}
+.hw__count span {
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+.hw__controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 18px;
+  pointer-events: auto;
+}
+.hw__controls .btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+  transform: none;
+}
+.hw__stage {
+  position: relative;
+  height: 100vh;
+  min-height: 620px;
+  cursor: grab;
+  touch-action: pan-y;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.hw__stage:active {
+  cursor: grabbing;
+}
+.hw__stage canvas {
+  touch-action: pan-y;
+}
+.hw__hint {
+  position: absolute;
+  left: var(--gutter);
+  bottom: 28px;
+  margin: 0;
+  color: var(--on-dark-muted);
+  font-size: 10.5px;
+  pointer-events: none;
+}
+.hw__nogl {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: var(--on-dark-muted);
+}
+.hw__list {
+  padding-bottom: 56px;
+}
+
+/* header on this page: logo, back link, platform */
+.hw-back {
+  padding: 8px 12px;
+  border-radius: 999px;
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--ink-2);
+  text-decoration: none;
+  font-family: var(--ui);
+}
+.hw-back:hover {
+  background: rgba(24, 36, 56, 0.05);
+  color: var(--ink);
+}
+.hw-cta {
+  display: inline-flex !important;
+}
+
+@media (max-width: 900px) {
+  .hw__head {
+    position: static;
+    padding-bottom: 8px;
+  }
+  .hw__head > * {
+    max-width: none;
+  }
+  .hw__stage {
+    height: 118vw;
+    max-height: 720px;
+    min-height: 0;
+  }
+  .hw__hint {
+    position: static;
+    padding: 14px var(--gutter) 18px;
+  }
+}
+@media (max-width: 480px) {
+  .hw-back {
+    padding: 8px 6px;
+    font-size: 13px;
+  }
+  .hw-cta {
+    padding: 0 12px !important;
+  }
+}

@@ -148,3 +148,24 @@
   background: var(--accent);
   color: #fff;
 }
+
+.xv__open {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 16px;
+  padding: 9px 16px;
+  border: 1px solid var(--line-dark);
+  border-radius: 999px;
+  color: var(--on-dark);
+  font-family: var(--ui);
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  pointer-events: auto;
+  transition: border-color 0.25s var(--ease), background-color 0.25s var(--ease);
+}
+.xv__open:hover {
+  border-color: var(--accent);
+  background: rgba(232, 98, 44, 0.12);
+}

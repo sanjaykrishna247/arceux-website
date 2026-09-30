@@ -3,9 +3,9 @@ import { nav, links, linkProps } from '../content.js';
 import LogoMark from './ui/LogoMark.jsx';
 import './Nav.css';
 
-export function Logo() {
+export function Logo({ href = '#top' }) {
   return (
-    <a href="#top" className="logo" aria-label="ARCEUX home">
+    <a href={href} className="logo" aria-label="ARCEUX home">
       <LogoMark size={38} className="logo__mark" />
       <span>ARCEUX</span>
     </a>

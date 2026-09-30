@@ -27,7 +27,13 @@ export function layerProgress(p, k) {
   return smooth(clamp01((p - start) / 0.72));
 }
 
-function Scene({ progress, overlay, labelled }) {
+/** Strictly one after another, arm first: each layer gets its own slice of the timeline. */
+export function sequentialProgress(p, k) {
+  const start = (7 - k) * 0.1;
+  return smooth(clamp01((p - start) / 0.3));
+}
+
+function Scene({ progress, overlay, labelled, lp = layerProgress, yaw }) {
   const rig = useRef({});
   const spin = useRef();
   const { camera, size } = useThree();
@@ -50,13 +56,13 @@ function Scene({ progress, overlay, labelled }) {
     const r = rig.current;
     if (!r.layers) return;
 
-    r.layers.forEach((g, k) => (g.position.y = layerProgress(p, k) * k * GAP));
+    r.layers.forEach((g, k) => (g.position.y = lp(p, k) * k * GAP));
     if (r.lidarHead) r.lidarHead.rotation.y = state.clock.elapsedTime * 3;
     if (!labelled) spin.current.rotation.y = Math.sin(state.clock.elapsedTime * 0.25) * 0.25;
 
     // camera pulls back and rises as the stack grows
     const pe = smooth(clamp01(p));
-    const az = 0.55 + 0.35 * pe;
+    const az = 0.55 + 0.35 * pe + (yaw?.current ?? 0);
     const el = 0.34 - 0.16 * pe;
     // fit the growing stack into the height left below the header (with a margin)
     // phones: pull back ~15% so the whole stack, arm included, sits inside the stage
@@ -90,7 +96,7 @@ function Scene({ progress, overlay, labelled }) {
       v.project(camera);
       const sx = (v.x * 0.5 + 0.5) * w;
       const sy = (-v.y * 0.5 + 0.5) * h;
-      items.push({ k, sx, sy, ly: sy, vis: clamp01((layerProgress(p, k) - 0.25) / 0.35) });
+      items.push({ k, sx, sy, ly: sy, vis: clamp01((lp(p, k) - 0.25) / 0.35) });
     }
 
     // pass 2: top → bottom, push labels apart so they never overlap or sit under the header
@@ -129,7 +135,7 @@ function Scene({ progress, overlay, labelled }) {
       }
     }
     if (o.counter) {
-      const n = [0, 1, 2, 3, 4, 5, 6, 7].filter((k) => k > 0 && layerProgress(p, k) > 0.6).length;
+      const n = [0, 1, 2, 3, 4, 5, 6, 7].filter((k) => k > 0 && lp(p, k) > 0.6).length;
       o.counter.textContent = String(n === 7 ? 8 : n).padStart(2, '0');
     }
   });
@@ -141,7 +147,7 @@ function Scene({ progress, overlay, labelled }) {
   );
 }
 
-export default function ExplodedScene({ progress, overlay, labelled = true, active = true }) {
+export default function ExplodedScene({ progress, overlay, labelled = true, active = true, lp, yaw }) {
   return (
     <Canvas
       dpr={[1, 1.75]}
@@ -151,7 +157,7 @@ export default function ExplodedScene({ progress, overlay, labelled = true, acti
       aria-hidden="true"
     >
       <Studio dark />
-      <Scene progress={progress} overlay={overlay} labelled={labelled} />
+      <Scene progress={progress} overlay={overlay} labelled={labelled} lp={lp} yaw={yaw} />
       <ContactShadows position={[0, 0.001, 0]} scale={8} blur={2.6} far={1.2} opacity={0.7} resolution={256} color="#000" />
     </Canvas>
   );

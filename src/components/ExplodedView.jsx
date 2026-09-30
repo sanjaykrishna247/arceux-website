@@ -36,6 +36,9 @@ function Pinned({ gl }) {
           <p className="mono xv__count">
             Layers separated <span ref={(el) => (o.counter = el)}>00</span> / 08
           </p>
+          <a className="xv__open" href="/hardware">
+            Open layer-by-layer view <span aria-hidden="true">→</span>
+          </a>
         </div>
         <div className="xv__stage">
           {gl && (
@@ -82,6 +85,9 @@ function Stacked({ gl }) {
   return (
     <div className="container xv__mobile">
       <Head />
+      <a className="xv__open" href="/hardware">
+        Open layer-by-layer view <span aria-hidden="true">→</span>
+      </a>
       <div className="xv__mstage" ref={stage}>
         {gl && (
           <Suspense fallback={null}>

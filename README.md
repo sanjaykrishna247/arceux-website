@@ -15,6 +15,15 @@ npm run preview    # serve the build
 
 Needs Node 18 or newer.
 
+## Pages
+
+| URL | What it is |
+|---|---|
+| `/` | The product site |
+| `/hardware` | Hardware part details. The 3D robot separates layer by layer on its own; dragging rotates it while the layers rejoin, and they separate again on release. Built from `hardware.html` → `src/pages/HardwarePage.jsx`. |
+
+`/hardware` works in `npm run dev`, `npm run preview` and on Vercel (`cleanUrls` in `vercel.json`).
+
 ## Edit the content
 
 All copy lives in **`src/content.js`**. The numbers, formulas, D-H table and node graph follow the design report.
