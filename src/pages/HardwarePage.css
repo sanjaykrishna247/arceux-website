@@ -77,24 +77,11 @@
   padding-bottom: 56px;
 }
 
-/* header on this page: logo, back link, platform */
-.hw-back {
-  padding: 8px 12px;
-  border-radius: 999px;
-  font-size: 13.5px;
-  font-weight: 500;
-  color: var(--ink-2);
-  text-decoration: none;
-  font-family: var(--ui);
+/* header on this page: logo + explore link */
+.hw-explore {
+  margin-left: 8px;
+  min-height: 40px;
 }
-.hw-back:hover {
-  background: rgba(24, 36, 56, 0.05);
-  color: var(--ink);
-}
-.hw-cta {
-  display: inline-flex !important;
-}
-
 @media (max-width: 900px) {
   .hw__head {
     position: static;
@@ -111,14 +98,5 @@
   .hw__hint {
     position: static;
     padding: 14px var(--gutter) 18px;
-  }
-}
-@media (max-width: 480px) {
-  .hw-back {
-    padding: 8px 6px;
-    font-size: 13px;
-  }
-  .hw-cta {
-    padding: 0 12px !important;
   }
 }
